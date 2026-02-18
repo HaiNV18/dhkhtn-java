@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+/*
+* Bai 5 SpringMVC
+* */
 @RestController
+@RequestMapping("/api/demo/")
 public class DemoController {
 
     @DeleteMapping("/orders/detail/body")
@@ -66,11 +71,17 @@ public class DemoController {
 //    }
 
     @GetMapping("/products")
-    public ResponseEntity getAllProducts(){
-        List<String> productNames = new ArrayList<>();
-        productNames.add("Samsung");
-        return new ResponseEntity<>(productNames, HttpStatus.OK);
+    public ResponseEntity getAllProducts(@RequestHeader Map<String, String> headers){
+        System.out.println(headers);
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
+
+//    @GetMapping("/products")
+//    public ResponseEntity getAllProducts(){
+//        List<String> productNames = new ArrayList<>();
+//        productNames.add("Samsung");
+//        return new ResponseEntity<>(productNames, HttpStatus.OK);
+//    }
 
     @GetMapping("/product/{id}/detail")
     public ResponseEntity<String> getProductByIdFromPath(@PathVariable String id){
