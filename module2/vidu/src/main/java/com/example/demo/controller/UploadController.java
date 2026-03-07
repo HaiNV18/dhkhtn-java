@@ -3,15 +3,12 @@ package com.example.demo.controller;
 import com.example.demo.service.ExternalApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 import tools.jackson.databind.JsonNode;
 
 import java.io.IOException;
@@ -24,19 +21,6 @@ public class UploadController {
 
     @Autowired
     ExternalApiService externalApiService;
-
-    private final TemplateEngine templateEngine;
-
-    public UploadController(TemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
-    }
-
-    @GetMapping(value = "/product/detail_page", produces = MediaType.TEXT_HTML_VALUE)
-    public String showProductDetails() {
-        Context context = new Context();
-        context.setVariable("productName", "Marshall speaker 111");
-        return templateEngine.process("product_management/product_detail", context);
-    }
 
     @GetMapping("/product/list")
     public ResponseEntity<JsonNode> getProductList() {
