@@ -28,6 +28,8 @@
 
 <h2>Danh sách Restaurant</h2>
 
+<a th:href="@{/restaurants/upload}">Insert Restaurant</a>
+
 <table>
     <thead>
     <tr>
@@ -40,7 +42,11 @@
     </thead>
     <tbody>
     <tr th:each="r : ${list}">
-        <td th:text="${r.restaurantId}"></td>
+        <td>
+            <a th:href="@{/restaurants/detail/{id}(id=${r.restaurantId})}">
+                <span th:text="${r.restaurantId}"></span>
+            </a>
+        </td>
         <td th:text="${r.name}"></td>
         <td th:text="${r.borough}"></td>
         <td th:text="${r.cuisine}"></td>

@@ -5,12 +5,11 @@ import com.myweb.restaurant.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/restaurants")
@@ -27,8 +26,11 @@ public class RestaurantController {
     @GetMapping(value = "", produces = MediaType.TEXT_HTML_VALUE)
     public String showUploadPage(@RequestParam(defaultValue = "0") int page, Model model) {//mặc định là trang đầu tiên
         int pageSize = 10;	//mỗi trang hiển thị tối đa 10 dữ liệu
-        Page<Restaurant> restaurantPage = restaurantService.findAllPagination(PageRequest.of(page, pageSize));
-        int totalPages = restaurantPage.getTotalPages();	//378
+        Page<Restaurant> restaurantPage =
+                restaurantService.findAllPagination(
+                        PageRequest.of(page, pageSize, Sort.by("name").ascending())
+                );
+        int totalPages = restaurantPage.getTotalPages();
         int currentPage = page;
         int maxPagesToShow = 5;	//hiển thị tối đa 5 chỉ số trang
         int startPage = Math.max(0, currentPage - maxPagesToShow / 2);
@@ -43,4 +45,22 @@ public class RestaurantController {
         model.addAttribute("endPage", endPage);
         return "unit4_restaurants";
     }
+
+    @GetMapping("/detail/{restaurantId}")
+    public String showRestaurantDetail(@PathVariable String restaurantId, Model model) {
+        Restaurant restaurant = restaurantService.findById(restaurantId);
+        model.addAttribute("restaurant", restaurant);
+        return "unit4_restaurant_detail";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateRestaurant(@PathVariable("id") String restaurantId,
+                                   @ModelAttribute("restaurant") Restaurant restaurant) {
+        Restaurant oldObject = restaurantService.findById(restaurantId);
+        restaurantService.updateRestaurant(oldObject, restaurant);
+        return "redirect:/restaurants";
+    }
+
+
+
 }

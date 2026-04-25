@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class RestaurantService {
@@ -59,6 +61,23 @@ public class RestaurantService {
 
     public Page<Restaurant> findAllPagination(Pageable pageable) {
         return restaurantRepo.findAll(pageable);
+    }
+
+    public Restaurant findById(String id) {
+        return restaurantRepo.findByRestaurantId(id).orElse(null);
+    }
+
+    public Restaurant updateRestaurant(Restaurant oldObject, Restaurant newObject){
+        if (Objects.nonNull(newObject.getName())){
+            oldObject.setName(newObject.getName());
+        }
+        if (Objects.nonNull(newObject.getBorough())){
+            oldObject.setBorough(newObject.getBorough());
+        }
+        if (Objects.nonNull(newObject.getCuisine())){
+            oldObject.setCuisine(newObject.getCuisine());
+        }
+        return restaurantRepo.save(oldObject);
     }
 
 }
